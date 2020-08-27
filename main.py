@@ -6,6 +6,9 @@ import argparse
 import time
 import torch
 from classes import SVAE, VAELoss, DataReader
+import os
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 def load_data(args):
