@@ -177,7 +177,7 @@ class DataReader:
 	# 			self.data_te[int(line[0]) - self.min_user].append([ int(line[1]), 1 ])
 		
 	def number(self):
-		self.num_b = int(min(len(self.data), self.hyper_params['number_users_to_keep']) / self.batch_size)
+		self.num_b = int(min(len(self.data_train), self.hyper_params['number_users_to_keep']) / self.batch_size)
 	
 	def iter(self):
 		users_done = 0
