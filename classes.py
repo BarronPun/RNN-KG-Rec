@@ -32,7 +32,7 @@ class Encoder(nn.Module):
 	def __init__(self, rnn_size, hidden_size):
 		super(Encoder, self).__init__()
 		self.linear1 = nn.Linear(rnn_size, hidden_size)
-		nn.init.xavier_normal(self.linear1.weight)
+		nn.init.xavier_normal_(self.linear1.weight)
 		self.activation = nn.Tanh()
 
 	def forward(self, x):
@@ -45,8 +45,8 @@ class Decoder(nn.Module):
 		super(Decoder, self).__init__()
 		self.linear1 = nn.Linear(latent_size, hidden_size)
 		self.linear2 = nn.Linear(hidden_size, num_items)
-		nn.init.xavier_normal(self.linear1.weight)
-		nn.init.xavier_normal(self.linear2.weight)
+		nn.init.xavier_normal_(self.linear1.weight)
+		nn.init.xavier_normal_(self.linear2.weight)
 		self.activation = nn.Tanh()
 
 	def forward(self, x):

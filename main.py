@@ -43,7 +43,7 @@ def load_data(args):
 	return train_reader, test_reader, num_users, num_items
 
 
-def train(epoch, reader, hyper_params, model, opt, criterion):
+def train(epoch, reader, hyper_params, model, optimizer, criterion):
 	model.train()
 	total_loss = 0
 	start_time = time.time()
@@ -59,7 +59,7 @@ def train(epoch, reader, hyper_params, model, opt, criterion):
 		
 		# Empty the gradients
 		model.zero_grad()
-		opt.zero_grad()
+		optimizer.zero_grad()
 	
 		# Forward pass
 		decoder_output, z_mean, z_log_sigma = model(x)
@@ -67,7 +67,7 @@ def train(epoch, reader, hyper_params, model, opt, criterion):
 		# Backward pass
 		loss = criterion(decoder_output, z_mean, z_log_sigma, y_s, anneal)
 		loss.backward()
-		opt.step()
+		optimizer.step()
 
 		total_loss += loss.data
 		
@@ -244,6 +244,8 @@ def main():
 	model.to(device)
 
 	criterion = VAELoss(args)
+
+	optimizer = None
 
 	if parser.optimizer == 'adagrad':
 		optimizer = torch.optim.Adagrad(
