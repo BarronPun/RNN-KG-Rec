@@ -185,7 +185,7 @@ def args_parse():
 	parser.add_argument('--rnn_size', type=int, default=128)
 	parser.add_argument('--hidden_size', type=int, default=128, help='dim of the hidden layer in vae')
 	parser.add_argument('--latent_size', type=int, default=64, help='dim of the latent variables in vae')
-	parser.add_argument('--optimizer', type=str, default='Adam')
+	parser.add_argument('--optimizer', type=str, default='adam')
 	parser.add_argument('--lr', type=float, default=0.001)
 	parser.add_argument('--weight_decay', type=float, default=5e-3)
 	parser.add_argument('--loss_type', type=str, default='next_k')
