@@ -43,7 +43,7 @@ def load_data(args):
 	return train_reader, test_reader, num_users, num_items
 
 
-def train(epoch, reader, hyper_params, model, optimizer, criterion):
+def train(epoch, reader, hyper_params, model, opt, criterion):
 	model.train()
 	total_loss = 0
 	start_time = time.time()
@@ -59,7 +59,7 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 		
 		# Empty the gradients
 		model.zero_grad()
-		optimizer.zero_grad()
+		opt.zero_grad()
 	
 		# Forward pass
 		decoder_output, z_mean, z_log_sigma = model(x)
@@ -67,7 +67,7 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 		# Backward pass
 		loss = criterion(decoder_output, z_mean, z_log_sigma, y_s, anneal)
 		loss.backward()
-		optimizer.step()
+		opt.step()
 
 		total_loss += loss.data
 		
@@ -241,6 +241,7 @@ def main():
 
 
 	model = SVAE(rnn_size, hidden_size, latent_size, num_items, item_embed_size)
+	model.to(device)
 
 	criterion = VAELoss(args)
 
@@ -261,8 +262,6 @@ def main():
 			model.parameters(), weight_decay=weight_decay
 		)
 
-	
-	model.to(device)
 
 	### Training...
 	# For the training set, split 20% for validation

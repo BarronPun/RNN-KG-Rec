@@ -67,7 +67,7 @@ class SVAE(nn.Module):
 		self.gru = nn.GRU(item_embed_size, rnn_size, batch_first=True)
 		
 		self.linear1 = nn.Linear(hidden_size, 2*latent_size)
-		nn.init.xavier_normal(self.linear1.weight)
+		nn.init.xavier_normal_(self.linear1.weight)
 		
 		self.tanh = nn.Tanh()
 
