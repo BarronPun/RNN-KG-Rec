@@ -11,7 +11,7 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
-def load_data(args):
+def load_data(args, device):
 	data_train, data_test = [], []
 	
 	# get the number of users/items from user/item_list.txt, the first line is a header
@@ -37,8 +37,8 @@ def load_data(args):
 			line_tuple = np.array(line_tuple, dtype=int)
 			data_test.append(line_tuple[1:])
 
-	train_reader = DataReader(args, data_train, None, num_items, True)
-	test_reader = DataReader(args, data_train, data_test, num_items, False)
+	train_reader = DataReader(args, data_train, None, num_items, True, device)
+	test_reader = DataReader(args, data_train, data_test, num_items, False, device)
 
 	return train_reader, test_reader, num_users, num_items
 
@@ -237,7 +237,7 @@ def main():
 	}
 
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-	train_reader, test_reader, num_users, num_items = load_data(args)
+	train_reader, test_reader, num_users, num_items = load_data(args, device)
 
 
 	model = SVAE(rnn_size, hidden_size, latent_size, num_items, item_embed_size)

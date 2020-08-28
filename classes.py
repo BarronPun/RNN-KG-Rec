@@ -134,7 +134,7 @@ class VAELoss(torch.nn.Module):
 
 
 class DataReader:
-	def __init__(self, hyper_params, a, b, num_items, is_training):
+	def __init__(self, hyper_params, a, b, num_items, is_training, device):
 		self.hyper_params = hyper_params
 		self.batch_size = hyper_params['batch_size']
 		
@@ -153,6 +153,7 @@ class DataReader:
 		self.data_train = a
 		self.data_test = b
 		self.is_training = is_training
+		self.device = device
 		# self.all_users = []
 		
 		# self.prep()
@@ -195,7 +196,8 @@ class DataReader:
 			users_done += 1
 			
 			y_batch_s = torch.zeros(self.batch_size, len(self.data_train[user]) - 1, self.num_items)
-			if is_cuda_available: y_batch_s = y_batch_s.cuda()
+			# if is_cuda_available: y_batch_s = y_batch_s.cuda()
+			y_batch_s.to(self.device)
 			
 			if self.hyper_params['loss_type'] == 'predict_next':
 				for timestep in range(len(self.data_train[user]) - 1):
