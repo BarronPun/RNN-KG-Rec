@@ -237,7 +237,7 @@ def main():
 	}
 
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-	train_reader, test_reader, num_users, num_items = load_data()
+	train_reader, test_reader, num_users, num_items = load_data(args)
 
 
 	model = SVAE(rnn_size, hidden_size, latent_size, num_items, item_embed_size)
