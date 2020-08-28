@@ -16,21 +16,21 @@ def load_data(args):
 	
 	# get the number of users/items from user/item_list.txt, the first line is a header
 	num_users, num_items = 0, 0
-	with open(args[user_list_path], encoding='utf-8') as f:
+	with open(args['user_list_path'], encoding='utf-8') as f:
 		content = f.readlines()
 		num_users = len(content) - 1
-	with open(args[item_list_path], encoding='utf-8') as f:
+	with open(args['item_list_path'], encoding='utf-8') as f:
 		content = f.readlines()
 		num_items = len(content) - 1
 
-	with open(args[train_path], encoding='utf-8') as f:
+	with open(args['train_path'], encoding='utf-8') as f:
 		content = f.readlines()
 		for line in content:
 			line_tuple = line.strip().split(' ')
 			line_tuple = np.array(line_tuple, dtype=int)
 			data_train.append(line_tuple[1:])
 
-	with open(args[test_path], encoding='utf-8') as f:
+	with open(args['test_path'], encoding='utf-8') as f:
 		content = f.readlines()
 		for line in content:
 			line_tuple = line.strip().split(' ')
