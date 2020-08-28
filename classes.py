@@ -202,26 +202,26 @@ class DataReader:
 			if self.hyper_params['loss_type'] == 'predict_next':
 				for timestep in range(len(self.data_train[user]) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in [ self.data_train[user][timestep + 1] ] ]), 1.0
+						0, torch.LongTensor([ i for i in [ self.data_train[user][timestep + 1] ] ]), 1.0
 					)
 				
 			elif self.hyper_params['loss_type'] == 'next_k':
 				for timestep in range(len(self.data_train[user]) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in self.data_train[user][timestep + 1:][:self.hyper_params['next_k']] ]), 1.0
+						0, torch.LongTensor([ i for i in self.data_train[user][timestep + 1:][:self.hyper_params['next_k']] ]), 1.0
 					)
 				
 			elif self.hyper_params['loss_type'] == 'postfix':
 				for timestep in range(len(self.data_train[user]) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in self.data_train[user][timestep + 1:] ]), 1.0
+						0, torch.LongTensor([ i for i in self.data_train[user][timestep + 1:] ]), 1.0
 					)
 			
 			x_batch.append([ i for i in self.data_train[user][:-1] ])
 			
 			if len(x_batch) == self.batch_size: # batch_size always = 1
 			
-				yield Variable(LongTensor(x_batch)), Variable(y_batch_s, requires_grad=False)
+				yield Variable(torch.LongTensor(x_batch)), Variable(y_batch_s, requires_grad=False)
 				x_batch = []
 
 	def iter_eval(self):
@@ -249,19 +249,19 @@ class DataReader:
 			if self.hyper_params['loss_type'] == 'predict_next':
 				for timestep in range(len(base_predictions_on) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in [ base_predictions_on[timestep + 1] ] ]), 1.0
+						0, torch.LongTensor([ i for i in [ base_predictions_on[timestep + 1] ] ]), 1.0
 					)
 				
 			elif self.hyper_params['loss_type'] == 'next_k':
 				for timestep in range(len(base_predictions_on) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in base_predictions_on[timestep + 1:][:self.hyper_params['next_k']] ]), 1.0
+						0, torch.LongTensor([ i for i in base_predictions_on[timestep + 1:][:self.hyper_params['next_k']] ]), 1.0
 					)
 				
 			elif self.hyper_params['loss_type'] == 'postfix':
 				for timestep in range(len(base_predictions_on) - 1):
 					y_batch_s[len(x_batch), timestep, :].scatter_(
-						0, LongTensor([ i for i in base_predictions_on[timestep + 1:] ]), 1.0
+						0, torch.LongTensor([ i for i in base_predictions_on[timestep + 1:] ]), 1.0
 					)
 			
 			test_movies.append([ i for i in heldout_movies ])
@@ -270,7 +270,7 @@ class DataReader:
 			
 			if len(x_batch) == self.batch_size: # batch_size always = 1
 				
-				yield Variable(LongTensor(x_batch)), Variable(y_batch_s, requires_grad=False), test_movies, test_movies_r
+				yield Variable(torch.LongTensor(x_batch)), Variable(y_batch_s, requires_grad=False), test_movies, test_movies_r
 				x_batch = []
 				test_movies, test_movies_r = [], []
 
