@@ -189,6 +189,7 @@ def args_parse():
 	parser.add_argument('--lr', type=float, default=0.001)
 	parser.add_argument('--weight_decay', type=float, default=5e-3)
 	parser.add_argument('--loss_type', type=str, default='next_k')
+	parser.add_argument('--next_k', type=int, default=20)
 	parser.add_argument('--number_users_to_keep', type=int, default=1000000000)
 	parser.add_argument('--history_split_test', type=str, default='[0.8, 0.2]')
 	parser.add_argument('--batch_log_interval', type=int, default=100)
@@ -213,6 +214,7 @@ def main():
 	lr = parser.lr
 	weight_decay = parser.weight_decay
 	loss_type = parser.loss_type
+	next_k = parser.next_k
 	number_users_to_keep = parser.number_users_to_keep
 	history_split_test = eval(parser.history_split_test)
 	batch_log_interval = parser.batch_log_interval
@@ -230,6 +232,7 @@ def main():
 		'hidden_size': hidden_size,
 		'latent_size': latent_size,
 		'loss_type': loss_type,
+		'next_k': next_k,
 		'number_users_to_keep': number_users_to_keep,
 		'history_split_test': history_split_test,
 		'batch_log_interval': batch_log_interval,
