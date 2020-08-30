@@ -59,6 +59,8 @@ class Decoder(nn.Module):
 class SVAE(nn.Module):
 	def __init__(self, rnn_size, hidden_size, latent_size, num_items, item_embed_size):
 		super(SVAE, self).__init__()
+
+		self.latent_size = latent_size
 		self.encoder = Encoder(rnn_size, hidden_size)
 		self.decoder = Decoder(latent_size, hidden_size, num_items)
 		
@@ -77,8 +79,8 @@ class SVAE(nn.Module):
 		"""
 		temp_out = self.linear1(h_enc)
 		
-		mu = temp_out[:, :latent_size]
-		log_sigma = temp_out[:, latent_size:]
+		mu = temp_out[:, :self.latent_size]
+		log_sigma = temp_out[:, self.latent_size:]
 
 		sigma = torch.exp(log_sigma)
 		std_z = torch.from_numpy(np.random.normal(0, 1, size=sigma.size())).float()
