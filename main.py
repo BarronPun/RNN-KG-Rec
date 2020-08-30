@@ -8,7 +8,7 @@ import torch
 from classes import SVAE, VAELoss, DataReader
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 def load_data(args, device):
@@ -194,6 +194,7 @@ def args_parse():
 	parser.add_argument('--history_split_test', type=str, default='[0.8, 0.2]')
 	parser.add_argument('--batch_log_interval', type=int, default=100)
 	parser.add_argument('--train_cp_users', type=int, default=200)
+	parser.add_argument('--cuda', type=str, default='2')
 
 	return parser.parse_args()
 
@@ -219,6 +220,7 @@ def main():
 	history_split_test = eval(parser.history_split_test)
 	batch_log_interval = parser.batch_log_interval
 	train_cp_users = parser.train_cp_users
+	cuda = parser.cuda
 
 	args = {
 		'train_path': train_path,
@@ -239,7 +241,7 @@ def main():
 		'train_cp_users': train_cp_users
 	}
 
-	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+	device = torch.device("cuda:"+cuda if torch.cuda.is_available() else "cpu")
 	train_reader, test_reader, num_users, num_items = load_data(args, device)
 
 
