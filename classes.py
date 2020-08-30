@@ -83,14 +83,14 @@ class SVAE(nn.Module):
 		log_sigma = temp_out[:, self.latent_size:]
 
 		sigma = torch.exp(log_sigma)
-		std_z = torch.from_numpy(np.random.normal(0, 1, size=sigma.size())).float()
+		self.std_z = torch.from_numpy(np.random.normal(0, 1, size=sigma.size())).float()
 		
-		# std_z.to(device)
+		# std_z.to(self.device)
 		
 		self.z_mean = mu
 		self.z_log_sigma = log_sigma
 
-		return mu + sigma * Variable(std_z, requires_grad=False) # Reparameterization trick
+		return mu + sigma * Variable(self.std_z, requires_grad=False) # Reparameterization trick
 
 	def forward(self, x):
 		in_shape = x.shape
