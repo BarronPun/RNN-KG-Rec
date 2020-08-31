@@ -192,7 +192,7 @@ def args_parse():
 	parser.add_argument('--next_k', type=int, default=20)
 	parser.add_argument('--number_users_to_keep', type=int, default=1000000000)
 	parser.add_argument('--history_split_test', type=str, default='[0.8, 0.2]')
-	parser.add_argument('--batch_log_interval', type=int, default=100)
+	parser.add_argument('--batch_log_interval', type=int, default=1000)
 	parser.add_argument('--train_cp_users', type=int, default=200)
 	parser.add_argument('--cuda', type=str, default='2')
 
