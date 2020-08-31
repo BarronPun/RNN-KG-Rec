@@ -84,7 +84,7 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 			if batch == batch_limit: div = (batch_limit % hyper_params['batch_log_interval']) - 1
 			if div <= 0: div = 1
 
-			cur_loss = (total_loss.item()[0] / div)
+			cur_loss = (total_loss.item() / div)
 			elapsed = time.time() - start_time
 			
 			ss = '| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | loss {:5.4f}'.format(
