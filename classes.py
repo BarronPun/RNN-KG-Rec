@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.autograd import Variable
+import torch.nn.functional as F
 
 class GRU4Rec(nn.Module):
 	def __init__(self, input_size, hidden_size, output_size, num_layers=1, final_act='tanh', dropout_hidden=.5, dropout_input=0, batch_size=128, embedding_dim=64, use_cuda=False):
