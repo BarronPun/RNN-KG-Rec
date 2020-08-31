@@ -57,10 +57,11 @@ class Decoder(nn.Module):
 
 
 class SVAE(nn.Module):
-	def __init__(self, rnn_size, hidden_size, latent_size, num_items, item_embed_size):
+	def __init__(self, rnn_size, hidden_size, latent_size, num_items, item_embed_size, device):
 		super(SVAE, self).__init__()
 
 		self.latent_size = latent_size
+		self.device = device
 		self.encoder = Encoder(rnn_size, hidden_size)
 		self.decoder = Decoder(latent_size, hidden_size, num_items)
 		
@@ -83,14 +84,14 @@ class SVAE(nn.Module):
 		log_sigma = temp_out[:, self.latent_size:]
 
 		sigma = torch.exp(log_sigma)
-		self.std_z = torch.from_numpy(np.random.normal(0, 1, size=sigma.size())).float()
+		std_z = torch.from_numpy(np.random.normal(0, 1, size=sigma.size())).float()
 		
 		# std_z.to(self.device)
 		
 		self.z_mean = mu
 		self.z_log_sigma = log_sigma
 
-		return mu + sigma * Variable(self.std_z, requires_grad=False) # Reparameterization trick
+		return mu + sigma * Variable(std_z, requires_grad=False).to(self.device) # Reparameterization trick
 
 	def forward(self, x):
 		in_shape = x.shape

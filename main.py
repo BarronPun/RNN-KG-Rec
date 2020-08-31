@@ -245,7 +245,7 @@ def main():
 	train_reader, test_reader, num_users, num_items = load_data(args, device)
 
 
-	model = SVAE(rnn_size, hidden_size, latent_size, num_items, item_embed_size)
+	model = SVAE(rnn_size, hidden_size, latent_size, num_items, item_embed_size, device)
 	model.to(device)
 
 	criterion = VAELoss(args)
