@@ -264,7 +264,7 @@ def main():
 		)
 	elif parser.optimizer == 'adam':
 		optimizer = torch.optim.Adam(
-			model.parameters(), weight_decay=weight_decay
+			model.parameters(), weight_decay=weight_decay, lr=lr
 		)
 	elif parser.optimizer == 'rmsprop':
 		optimizer = torch.optim.RMSprop(
