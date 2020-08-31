@@ -228,7 +228,7 @@ class DataReader:
 			
 			if len(x_batch) == self.batch_size: # batch_size always = 1
 			
-				yield Variable(torch.LongTensor(x_batch).to(self.device)), Variable(y_batch_s, requires_grad=False)
+				yield Variable(torch.LongTensor(x_batch)).to(self.device), Variable(y_batch_s, requires_grad=False).to(self.device)
 				x_batch = []
 
 	def iter_eval(self):
