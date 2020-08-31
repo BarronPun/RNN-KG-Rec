@@ -129,7 +129,7 @@ class VAELoss(torch.nn.Module):
 		
 		likelihood = torch.sum(
 			-1.0 * y_true_s.view(dec_shape[0] * dec_shape[1], -1) * \
-			decoder_output.view(dec_shape[0] * dec_shape[1], -1)
+			decoder_output.view(dec_shape[0] * dec_shape[1], -1).to(hyper_params['device'])
 		) / (float(self.hyper_params['batch_size']) * num_ones)
 		
 		final = (anneal * kld) + (likelihood)

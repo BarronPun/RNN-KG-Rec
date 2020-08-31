@@ -222,6 +222,8 @@ def main():
 	train_cp_users = parser.train_cp_users
 	cuda = parser.cuda
 
+	device = torch.device("cuda:"+cuda if torch.cuda.is_available() else "cpu")
+
 	args = {
 		'train_path': train_path,
 		'test_path': test_path,
@@ -238,10 +240,10 @@ def main():
 		'number_users_to_keep': number_users_to_keep,
 		'history_split_test': history_split_test,
 		'batch_log_interval': batch_log_interval,
-		'train_cp_users': train_cp_users
+		'train_cp_users': train_cp_users,
+		'device': device
 	}
 
-	device = torch.device("cuda:"+cuda if torch.cuda.is_available() else "cpu")
 	train_reader, test_reader, num_users, num_items = load_data(args, device)
 
 
