@@ -127,8 +127,8 @@ class VAELoss(torch.nn.Module):
 		decoder_output = F.log_softmax(decoder_output, -1)
 		num_ones = float(torch.sum(y_true_s[0, 0]))
 
-		print('decoder_output', type(decoder_output))
-		print('y_true_s', type(y_true_s))
+		print(decoder_output, type(decoder_output))
+		print(y_true_s, type(y_true_s))
 		
 		likelihood = torch.sum(
 			-1.0 * y_true_s.view(dec_shape[0] * dec_shape[1], -1) * \
