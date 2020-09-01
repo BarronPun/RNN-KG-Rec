@@ -101,6 +101,8 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 			print(ss)
 
 			total_loss = 0
+			total_kld = 0
+			total_likelihood = 0
 			start_time = time.time()
 
 
