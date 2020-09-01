@@ -137,7 +137,7 @@ class VAELoss(torch.nn.Module):
 		
 		final = (anneal * kld) + (likelihood)
 		
-		return final
+		return final, (anneal * kld), likelihood
 
 
 class DataReader:

@@ -46,6 +46,8 @@ def load_data(args, device):
 def train(epoch, reader, hyper_params, model, optimizer, criterion):
 	model.train()
 	total_loss = 0
+	total_kld = 0
+	total_likelihood = 0
 	start_time = time.time()
 	batch = 0
 	batch_limit = int(reader.num_b)
@@ -65,11 +67,13 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 		decoder_output, z_mean, z_log_sigma = model(x)
 		
 		# Backward pass
-		loss = criterion(decoder_output, z_mean, z_log_sigma, y_s, anneal)
+		loss, kld, likelihood = criterion(decoder_output, z_mean, z_log_sigma, y_s, anneal)
 		loss.backward()
 		optimizer.step()
 
 		total_loss += loss.data
+		total_kld += kld
+		total_likelihood += likelihood
 		
 		# Anneal logic
 		if total_anneal_steps > 0:
@@ -85,10 +89,12 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 			if div <= 0: div = 1
 
 			cur_loss = (total_loss.item() / div)
+			cur_kld = (total_kld.item() / div)
+			cur_likelihood = (total_likelihood.item() / div)
 			elapsed = time.time() - start_time
 			
-			ss = '| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | loss {:5.4f}'.format(
-					epoch, batch, batch_limit, (elapsed * 1000) / div, cur_loss
+			ss = '| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | loss ({:5.4f}) = kld ({:5.4f}) + likehood ({:5.4f})'.format(
+					epoch, batch, batch_limit, (elapsed * 1000) / div, cur_loss, cur_kld, cur_likelihood
 			)
 			
 			# file_write(hyper_params['log_file'], ss)
