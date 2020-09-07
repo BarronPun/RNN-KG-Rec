@@ -300,10 +300,10 @@ def main():
 	# For the training set, split 20% for validation
 	try:
 		if is_load_model:
-			# checkpoint = torch.load(model_save_path_file)
-			# model.load_state_dict(checkpoint['model'])
-			# optimizer.load_state_dict(checkpoint['optimizer'])
-			# epochs = checkpoint['epoch']
+			checkpoint = torch.load(model_save_path_file)
+			model.load_state_dict(checkpoint['model'])
+			optimizer.load_state_dict(checkpoint['optimizer'])
+			epochs = checkpoint['epoch']
 
 		for epoch in range(num_epoches):
 			epoch_start_time = time.time()
@@ -315,12 +315,12 @@ def main():
 			print('| epoch %d | testing result | NDCG@20: %.5f | Recall@20: %.5f |'%(epoch, metrics['NDCG@20'], metrics['Rec@20']))
 
 		if is_save_model:
-			# state = {
-			# 	'model': model.state_dict(),
-			# 	'optimizer': optimizer.state_dict,
-			# 	'epoch': epoch + 1
-			# }
-			# torch.save(state, model_save_path_file)
+			state = {
+				'model': model.state_dict(),
+				'optimizer': optimizer.state_dict,
+				'epoch': epoch + 1
+			}
+			torch.save(state, model_save_path_file)
 
 
 
