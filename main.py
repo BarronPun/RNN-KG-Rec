@@ -106,7 +106,7 @@ def train(epoch, reader, hyper_params, model, optimizer, criterion):
 			start_time = time.time()
 
 
-def evaluate(model, criterion, reader, hyper_params, is_train_set):
+def evaluate(model, criterion, reader, hyper_params, is_train_set, device):
 	model.eval()
 
 	metrics = {}
@@ -135,7 +135,7 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set):
 		# Making the logits of previous items in the sequence to be "- infinity"
 		decoder_output = decoder_output.data
 		x_scattered = torch.zeros(decoder_output.shape[0], decoder_output.shape[2])
-		if is_cuda_available: x_scattered = x_scattered.cuda()
+		x_scattered.to(device)
 		x_scattered[0, :].scatter_(0, x[0].data, 1.0)
 		last_predictions = decoder_output[:, -1, :] - (torch.abs(decoder_output[:, -1, :] * x_scattered) * 100000000)
 		
@@ -310,7 +310,7 @@ def main():
 
 			# train(epoch, train_reader, args, model, optimizer, criterion)
 
-			metrics, _ = evaluate(model, criterion, test_reader, args, False)
+			metrics, _ = evaluate(model, criterion, test_reader, args, False, device)
 
 			print('| epoch %d | testing result | NDCG@20: %.5f | Recall@20: %.5f |'%(epoch, metrics['NDCG@20'], metrics['Rec@20']))
 
