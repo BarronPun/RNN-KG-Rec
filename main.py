@@ -135,8 +135,9 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set, device):
 		# Making the logits of previous items in the sequence to be "- infinity"
 		decoder_output = decoder_output.data
 		x_scattered = torch.zeros(decoder_output.shape[0], decoder_output.shape[2])
-		x_scattered.to(device)
+		# x_scattered.to(device)
 		x_scattered[0, :].scatter_(0, x[0].data, 1.0)
+		x_scattered.to(device)
 		last_predictions = decoder_output[:, -1, :] - (torch.abs(decoder_output[:, -1, :] * x_scattered) * 100000000)
 		
 		for batch_num in range(last_predictions.shape[0]): # batch_num is ideally only 0, since batch_size is enforced to be always 1
