@@ -89,8 +89,8 @@ class SVAE(nn.Module):
 		
 		# std_z.to(self.device)
 		
-		self.z_mean = mu
-		self.z_log_sigma = log_sigma
+		self.z_mean = mu # _ x latent_size
+		self.z_log_sigma = log_sigma # _ x latent_size
 
 		return mu + sigma * Variable(std_z, requires_grad=False).to(self.device) # Reparameterization trick
 
@@ -105,7 +105,7 @@ class SVAE(nn.Module):
 		rnn_out = rnn_out.view(in_shape[0] * in_shape[1], -1)
 
 		enc_out = self.encoder(rnn_out)
-		sampled_z = self.sample_latent(enc_out)
+		sampled_z = self.sample_latent(enc_out) # _ x latent_size
 		
 		dec_out = self.decoder(sampled_z)
 		dec_out = dec_out.view(in_shape[0], in_shape[1], -1) # (batch_size, sql, num_items)

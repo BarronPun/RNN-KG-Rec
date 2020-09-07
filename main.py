@@ -111,7 +111,7 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set):
 
 	metrics = {}
 	metrics['loss'] = 0.0
-	Ks = [10, 100]
+	Ks = [20]
 	for k in Ks: 
 		metrics['NDCG@' + str(k)] = 0.0
 		metrics['Rec@' + str(k)] = 0.0
@@ -124,6 +124,7 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set):
 	len_to_ndcg_at_100_map = {}
 
 	for x, y_s, test_movies, test_movies_r in reader.iter_eval():
+		if test_movies == [[]*len(test_movies)]: continue
 		batch += 1
 		if is_train_set == True and batch > hyper_params['train_cp_users']: break
 
@@ -174,9 +175,12 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set):
 	metrics['loss'] = round(metrics['loss'], 4)
 	
 	for k in Ks:
-		metrics['NDCG@' + str(k)] = round((100.0 * metrics['NDCG@' + str(k)]) / float(total_users), 4)
-		metrics['Rec@' + str(k)] = round((100.0 * metrics['Rec@' + str(k)]) / float(total_users), 4)
-		metrics['Prec@' + str(k)] = round((100.0 * metrics['Prec@' + str(k)]) / float(total_users), 4)
+		# metrics['NDCG@' + str(k)] = round((100.0 * metrics['NDCG@' + str(k)]) / float(total_users), 4)
+		# metrics['Rec@' + str(k)] = round((100.0 * metrics['Rec@' + str(k)]) / float(total_users), 4)
+		# metrics['Prec@' + str(k)] = round((100.0 * metrics['Prec@' + str(k)]) / float(total_users), 4)
+		metrics['NDCG@' + str(k)] = round((metrics['NDCG@' + str(k)]) / float(total_users), 5)
+		metrics['Rec@' + str(k)] = round((metrics['Rec@' + str(k)]) / float(total_users), 5)
+		metrics['Prec@' + str(k)] = round((metrics['Prec@' + str(k)]) / float(total_users), 5)
 		
 	return metrics, len_to_ndcg_at_100_map
 
@@ -203,6 +207,9 @@ def args_parse():
 	parser.add_argument('--batch_log_interval', type=int, default=1000)
 	parser.add_argument('--train_cp_users', type=int, default=200)
 	parser.add_argument('--cuda', type=str, default='2')
+	parser.add_argument('--is_save_model', type=bool, default=False)
+	parser.add_argument('--is_load_model', type=bool, default=False)
+	parser.add_argument('--model_save_path', type=str, default='./model/')
 
 	return parser.parse_args()
 
@@ -229,6 +236,12 @@ def main():
 	batch_log_interval = parser.batch_log_interval
 	train_cp_users = parser.train_cp_users
 	cuda = parser.cuda
+	is_save_model = parser.is_save_model
+	is_load_model = parser.is_load_model
+	model_save_path = parser.model_save_path
+
+	if not os.path.isdir(model_save_path):
+		os.makedirs(model_save_path)
 
 	device = torch.device("cuda:"+cuda if torch.cuda.is_available() else "cpu")
 
@@ -279,16 +292,35 @@ def main():
 			model.parameters(), weight_decay=weight_decay
 		)
 
+	cpfname = 'ckf-' + str(item_embed_size) + '-' + str(rnn_size) + '-' + str(hidden_size)+ \
+				'-' + str(latent_size) + '.pth'
+	model_save_path_file = model_save_path + cpfname
 
 	### Training...
 	# For the training set, split 20% for validation
 	try:
+		if is_load_model:
+			# checkpoint = torch.load(model_save_path_file)
+			# model.load_state_dict(checkpoint['model'])
+			# optimizer.load_state_dict(checkpoint['optimizer'])
+			# epochs = checkpoint['epoch']
+
 		for epoch in range(num_epoches):
 			epoch_start_time = time.time()
 
 			train(epoch, train_reader, args, model, optimizer, criterion)
 
-			# metrics, _ = evaluate()
+			metrics, _ = evaluate()
+
+			print('| epoch %d | testing result | NDCG@20: %.5f | Recall@20: %.5f |'%(epoch, metrics['NDCG@20'], metrics['Rec@20']))
+
+		if is_save_model:
+			# state = {
+			# 	'model': model.state_dict(),
+			# 	'optimizer': optimizer.state_dict,
+			# 	'epoch': epoch + 1
+			# }
+			# torch.save(state, model_save_path_file)
 
 
 
