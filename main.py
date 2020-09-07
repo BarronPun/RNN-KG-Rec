@@ -310,7 +310,7 @@ def main():
 
 			train(epoch, train_reader, args, model, optimizer, criterion)
 
-			metrics, _ = evaluate()
+			metrics, _ = evaluate(model, criterion, test_reader, args, False)
 
 			print('| epoch %d | testing result | NDCG@20: %.5f | Recall@20: %.5f |'%(epoch, metrics['NDCG@20'], metrics['Rec@20']))
 
