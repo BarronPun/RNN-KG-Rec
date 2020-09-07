@@ -251,7 +251,7 @@ class DataReader:
 				base_predictions_on = self.data_train[user]
 				heldout_movies = self.data_test[user]
 			
-			y_batch_s = torch.zeros(self.batch_size, len(base_predictions_on) - 1, self.num_items).cuda()
+			y_batch_s = torch.zeros(self.batch_size, len(base_predictions_on) - 1, self.num_items)
 			
 			if self.hyper_params['loss_type'] == 'predict_next':
 				for timestep in range(len(base_predictions_on) - 1):
