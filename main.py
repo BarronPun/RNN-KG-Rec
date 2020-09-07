@@ -130,7 +130,7 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set):
 
 		decoder_output, z_mean, z_log_sigma = model(x)
 		
-		metrics['loss'] += criterion(decoder_output, z_mean, z_log_sigma, y_s, 0.2).data[0]
+		metrics['loss'] += criterion(decoder_output, z_mean, z_log_sigma, y_s, 0.2)[0].data
 		
 		# Making the logits of previous items in the sequence to be "- infinity"
 		decoder_output = decoder_output.data
