@@ -136,7 +136,7 @@ def evaluate(model, criterion, reader, hyper_params, is_train_set, device):
 		decoder_output = decoder_output.data
 		x_scattered = torch.zeros(decoder_output.shape[0], decoder_output.shape[2])
 		# x_scattered.to(device)
-		x_scattered[0, :].scatter_(0, x[0].data, 1.0)
+		x_scattered[0, :].scatter_(0, x[0].data.cpu().numpy(), 1.0)
 		x_scattered.to(device)
 		last_predictions = decoder_output[:, -1, :] - (torch.abs(decoder_output[:, -1, :] * x_scattered) * 100000000)
 		
