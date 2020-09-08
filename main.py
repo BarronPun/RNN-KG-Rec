@@ -308,7 +308,7 @@ def main():
 		for epoch in range(num_epoches):
 			epoch_start_time = time.time()
 
-			# train(epoch, train_reader, args, model, optimizer, criterion)
+			train(epoch, train_reader, args, model, optimizer, criterion)
 
 			metrics, _ = evaluate(model, criterion, test_reader, args, False, device)
 
